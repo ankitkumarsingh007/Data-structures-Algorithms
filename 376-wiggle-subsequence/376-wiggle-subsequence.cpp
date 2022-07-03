@@ -5,20 +5,24 @@ public:
         if(n==1)
             return 1;
         
-        vector<int> bigend(n,1),smallend(n,1);
+        vector<int> up(n,1),down(n,1);
         
         int res=1;
         for(int i=1;i<n;i++){
-            for(int j=0;j<i;j++){
-                if(arr[j]>arr[i])
-                    smallend[i]=max(smallend[i],1+bigend[j]);
-                else if(arr[j]<arr[i])
-                    bigend[i]=max(bigend[i],1+smallend[j]);
+            if(arr[i]>arr[i-1]){
+                up[i]=down[i-1]+1;
+                down[i]=down[i-1];
             }
-            
-            res=max(res,max(bigend[i],smallend[i]));
+            else if(arr[i]<arr[i-1]){
+                down[i]=1+up[i-1];
+                up[i]=up[i-1];
+            }
+            else{
+                up[i]=up[i-1];
+                down[i]=down[i-1];
+            }
         }
         
-        return res;
+        return max(down[n-1],up[n-1]);
     }
 };

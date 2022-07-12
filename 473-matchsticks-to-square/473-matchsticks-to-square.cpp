@@ -10,12 +10,12 @@ public:
         
         if((a+arr[n])<=lim && fun(arr,a+arr[n],b,c,d,n+1,lim))
             return true;
-        if((b+arr[n])<=lim && fun(arr,a,b+arr[n],c,d,n+1,lim))
-        return true;
-        if((c+arr[n])<=lim && fun(arr,a,b,c+arr[n],d,n+1,lim))
-        return true;
-        if((d+arr[n])<=lim && fun(arr,a,b,c,d+arr[n],n+1,lim))
-        return true;
+        if(b!=a && (b+arr[n])<=lim && fun(arr,a,b+arr[n],c,d,n+1,lim))
+            return true;
+        if(c!=b && (c+arr[n])<=lim && fun(arr,a,b,c+arr[n],d,n+1,lim))
+            return true;
+        if(d!=c && (d+arr[n])<=lim && fun(arr,a,b,c,d+arr[n],n+1,lim))
+            return true;
         
         return false;
     }

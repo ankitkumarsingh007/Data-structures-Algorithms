@@ -44,7 +44,7 @@ public:
             
             for(int i=0;i<4;i++){
                 int x=a+h[i],y=b+v[i];
-                if(valid(x,y,n,m) && arr[x][y]>(arr[a][b]+1))
+                if(valid(x,y,n,m) && arr[x][y]==INT_MAX)
                 {
                     q.push({x,y});
                     arr[x][y]=arr[a][b]+1;

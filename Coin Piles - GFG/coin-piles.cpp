@@ -26,11 +26,14 @@ class Solution {
 	    
 	    for(int i=0; i<N; i++)
 	    {
+	        //good logic to find which elements have problem with me
 	        int pos = upper_bound(a.begin()+i,a.end(),a[i]+K) - a.begin();
 	        
 	        if(i > 0 && a[i] != a[i-1])
 	            prev = p[i-1];
 	        
+	        //sum of prev deleted ones + sum of all elements having problem
+	        //minus sum of changes required to be made
 	        ans = min(ans, prev + p[N-1] - p[pos-1] - (N-pos) * (a[i]+K));
 	    }
 	    return ans;

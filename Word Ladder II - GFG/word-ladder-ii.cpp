@@ -21,6 +21,8 @@ public:
         queue<vector<string>> q;
         q.push({beginWord});
         
+        bool flag=false;
+        
         while(!q.empty()){
             int size = q.size();
             while(size--){
@@ -35,14 +37,20 @@ public:
                             auto new_path = curr_path;
                             new_path.push_back(temp);
                             visited.insert(temp);
-                            if(temp == endWord)
+                            if(temp == endWord){
                                 ans.push_back(new_path);
+                                flag=true;
+                            }
                             else
                                 q.push(new_path);
                         }
                     }
                 }
             }
+            //if ans found then all solutions better be on this level itself
+            if(flag)
+                break;
+                
             //so that any string can be used in one step only
             for(auto& str : visited)
                     st.erase(str);

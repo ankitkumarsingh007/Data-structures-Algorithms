@@ -9,9 +9,15 @@ using namespace std;
 class Solution {
 public:
     vector<vector<string>> findSequences(string beginWord, string endWord, vector<string>& wordList) {
+        //to store all string
         unordered_set<string> st (wordList.begin(),wordList.end());
+        //to store all visited ones only
         unordered_set<string> visited;
+        
+        //ans array
         vector<vector<string>> ans;
+        
+        //queue for BFS
         queue<vector<string>> q;
         q.push({beginWord});
         
@@ -37,7 +43,7 @@ public:
                     }
                 }
             }
-            //so that it a
+            //so that any string can be used in one step only
             for(auto& str : visited)
                     st.erase(str);
         }

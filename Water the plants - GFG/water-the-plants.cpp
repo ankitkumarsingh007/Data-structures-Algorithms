@@ -47,7 +47,6 @@ class Solution{
                 currMax=max(currMax,aux[i].second);
                 i++;
             }
-            i--;
             //it means new possble max will be same as prev step
             if(currMax<maxRight)
             return -1;
@@ -55,7 +54,6 @@ class Solution{
             res++;
             maxRight=currMax+1;
             
-            i++;
         }
         
         return res;

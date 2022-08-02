@@ -1,27 +1,29 @@
 class Solution {
 public:
     typedef pair<int,pair<int,int>> pp;
-    int kthSmallest(vector<vector<int>>& matrix, int k) {
-        int n=matrix.size();
+    int kthSmallest(vector<vector<int>>& arr, int k) {
+        int n=arr.size();
         priority_queue<pp,vector<pp>,greater<pp>> pq;
-        pq.push({matrix[0][0],{0,0}});
-        
+    
+        for(int i=0;i<n;i++)
+        {
+            pq.push({arr[i][0],{i,0}});
+        }
+
         k--;
-        while(k--){
-            pp curr=pq.top();
+
+        while(k--)
+        {
+            pp temp=pq.top();
             pq.pop();
-            int a=curr.second.first,b=curr.second.second;
-            
-            if(a<(n-1) && matrix[a+1][b]!=INT_MAX){
-                pq.push({matrix[a+1][b],{a+1,b}});
-                matrix[a+1][b]=INT_MAX;
-            }
-            if(b<(n-1) && matrix[a][b+1]!=INT_MAX){
-                pq.push({matrix[a][b+1],{a,b+1}});
-                matrix[a][b+1]=INT_MAX;
+
+            int i=temp.second.first,j=temp.second.second;
+
+            if(j!=(n-1))
+            {
+                pq.push({arr[i][j+1],{i,j+1}});
             }
         }
-        
         return pq.top().first;
     }
 };

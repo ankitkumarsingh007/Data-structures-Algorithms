@@ -24,7 +24,7 @@ public:
                 nextstart=arr[pos];
             
             if(prevend<=start && nextstart>=end){
-                arr.push_back(start);
+                arr.insert(arr.begin()+pos,start);
                 mp[start]=end;
                 return true;
             }

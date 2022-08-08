@@ -12,10 +12,7 @@ public:
                dp[r]=a[i];
            }
            else{
-               int x=upper_bound(dp.begin(),dp.begin()+r,a[i])-dp.begin();
-               
-               if(x!=0 && dp[x-1]==a[i])
-                   continue;
+               int x=lower_bound(dp.begin(),dp.begin()+r,a[i])-dp.begin();
                
                dp[x]=a[i];
            }

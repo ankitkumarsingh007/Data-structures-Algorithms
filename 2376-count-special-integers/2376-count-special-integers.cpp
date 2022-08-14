@@ -24,8 +24,9 @@ public:
         n=s.size();
         
         vector<bool> used(10,false);
+        int i=0;
         
-        for(int i=0;i<n;i++){
+        for(i;i<n;i++){
             int add;
             if(i==0){
                 add=(s[i]-'0'-1);
@@ -45,25 +46,15 @@ public:
             
             res+=add;
             
+            // if any digit repeated no need to investigate further
             if(used[s[i]-'0'])
                 break;
             else
                 used[s[i]-'0']=true;
         }
         
-        vector<bool> arr(10,false);
-        bool flag=true;
-        for(char c:s){
-            if(arr[c-'0']==false)
-                arr[c-'0']=true;
-            else
-            {
-                flag=false;
-                break;
-            }
-        }
-        
-        if(flag)
+        //that no itself is special one
+        if(i==n)
             res++;
         
         return res;

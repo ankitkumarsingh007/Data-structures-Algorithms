@@ -2,7 +2,7 @@ class Solution {
 public:
     typedef long long ll;
     int combinationSum4(vector<int>& arr, int sum) {
-        sort(arr.begin(),arr.end());
+        // sort(arr.begin(),arr.end());
         ll mod=INT_MAX;
         
         vector<ll> dp(sum+1,0);
@@ -12,8 +12,8 @@ public:
             for(int x:arr){
                 if(x<=i)
                     dp[i]=(dp[i]%mod+dp[i-x]%mod)%mod;
-                else
-                    break;
+                // else
+                //     break;
             }
         }
         

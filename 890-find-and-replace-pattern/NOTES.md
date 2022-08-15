@@ -1,6 +1,6 @@
-**Very simple & intuitive solution**
+**Very simple & intuitive solution , Here word normalization is used**
 ```
-string helper(string s){
+string normalize(string s){
 int n=s.size();
 vector<int> pos(26,0);
 int cnt=1;
@@ -15,9 +15,9 @@ return res;
 }
 vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
 vector<string> res;
-string check=helper(pattern);
+string check=normalize(pattern);
 for(string &s:words){
-if(helper(s)==check)
+if(normalize(s)==check)
 res.push_back(s);
 }
 return res;

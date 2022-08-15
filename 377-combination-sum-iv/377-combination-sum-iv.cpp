@@ -8,8 +8,8 @@ public:
         for(int i=1;i<=sum;i++){
             for(int x:arr){
                 if(x<=i){
-                    dp[i]+=dp[i-x];
-                    //bcz if it's out of range of 32 bit then it won't be part of answer
+                    dp[i]=(dp[i]+dp[i-x]);
+                    //bcz if it's out of range of 32 bit then it won't be part oof answer
                     //as it's mentioned specially that result will be in 32 bit range
                     if(dp[i]>=INT_MAX)
                         dp[i]=-1;

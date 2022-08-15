@@ -1,6 +1,6 @@
 class Solution {
 public:
-    string helper(string s){
+    string normalize(string s){
         int n=s.size();
         vector<int> pos(26,0);
         int cnt=1;
@@ -19,10 +19,10 @@ public:
     vector<string> findAndReplacePattern(vector<string>& words, string pattern) {
         vector<string> res;
         
-        string check=helper(pattern);
+        string check=normalize(pattern);
         
         for(string &s:words){
-            if(helper(s)==check)
+            if(normalize(s)==check)
                 res.push_back(s);
         }
         

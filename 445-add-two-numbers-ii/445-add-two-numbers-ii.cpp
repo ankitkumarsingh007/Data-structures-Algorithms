@@ -10,50 +10,51 @@
  */
 class Solution {
 public:
-    ListNode* reverse(ListNode* head){
-        ListNode *prev=NULL,*curr=head;
-        
-        while(curr!=NULL){
-            ListNode* next=curr->next;
-            curr->next=prev;
-            prev=curr;
-            curr=next;
-        }
-        
-        return prev;
-    }
-    
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        l1=reverse(l1);
-        l2=reverse(l2);
+        //maintaining 3 stack first,second for storing input & last for result
+        stack<int> st1,st2,res;
         
-        ListNode *res=new ListNode();
-        ListNode *curr=res;
-        int carry=0;
-        
-        while(l1!=NULL || l2!=NULL){
-            int a=carry;
-            if(l1!=NULL)
-            {
-                a+=l1->val;
-                l1=l1->next;
-            }
-            if(l2!=NULL)
-            {
-                a+=l2->val;
-                l2=l2->next;
-            }
-            
-            curr->next=new ListNode(a%10);
-            curr=curr->next;
-            
-            carry=a/10;
+        //filling both stacks
+        while(l1!=NULL){
+            st1.push(l1->val);
+            l1=l1->next;
         }
-        if(carry!=0)
-            curr->next=new ListNode(carry);
-            
+        while(l2!=NULL){
+            st2.push(l2->val);
+            l2=l2->next;
+        }
         
-        res=reverse(res->next);
-        return res;
+        //filling result stack
+        int carry=0,sum;
+        
+        while(!st1.empty() || !st2.empty()){
+            sum=carry;
+            if(!st1.empty()){
+                sum+=st1.top();
+                st1.pop();
+            }
+            if(!st2.empty()){
+                sum+=st2.top();
+                st2.pop();
+            }
+            
+            res.push(sum%10);
+            carry=sum/10;
+        }
+        
+        if(carry!=0)
+            res.push(carry);
+        
+        
+        //making resultant linked list form result stack
+        ListNode *head=new ListNode(res.top()),*curr=head;
+        res.pop();
+        while(!res.empty()){
+            curr->next=new ListNode(res.top());
+            res.pop();
+            curr=curr->next;
+        }
+        
+        return head;
     }
 };

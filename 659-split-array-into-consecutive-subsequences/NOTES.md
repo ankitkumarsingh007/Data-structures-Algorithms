@@ -1,0 +1,3 @@
+**I think you have to first realize that each number can either be the beginning or the end of the sequence at a given point of iteration. Another subtle insight to this solution is proving that appending to a previous sequence is always better than creating a new sequence. Consider the problem [1,2,3,4,5,5,6,7] and how prioritizing the creation of a subsequence over appending would cause an issue.
+However, don't feel bad because I think a lot of people, myself included, did not find this problem to have a very intuitive answer. In an interview setting I would hope for some generous hints.**
+​

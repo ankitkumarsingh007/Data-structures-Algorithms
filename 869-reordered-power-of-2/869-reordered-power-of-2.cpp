@@ -7,17 +7,19 @@ public:
         if(l==r){
             x=stoi(s);
             
-            if(int(log10(x)+1)==size && (x&(x-1))==0)
+            if((x&(x-1))==0)
                 return true;
             else
                 return false;
         }
         
         for(int i=l;i<=r;i++){
-            swap(s[l],s[i]);
-            if(helper(l+1,r)==true)
-                return true;
-            swap(s[l],s[i]);
+            if(l!=0 || s[i]!='0'){
+                swap(s[l],s[i]);
+                if(helper(l+1,r)==true)
+                    return true;
+                swap(s[l],s[i]);
+            }
         }
         
         return false;

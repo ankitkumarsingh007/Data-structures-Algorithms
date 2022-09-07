@@ -17,6 +17,8 @@ public:
         
         string s=to_string(root->val),l=tree2str(root->left),r=tree2str(root->right);
         
+        //case 1: left is present
+        //case 2: left isn't present but right is present
         if(l!="" || r!="")
         {
             s+='(';
@@ -24,6 +26,7 @@ public:
             s+=')';
         }
         
+        //right is present
         if(r!="")
         {
             s+='(';

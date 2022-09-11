@@ -1,12 +1,13 @@
 typedef long long ll;
+bool comp(vector<ll> &a,vector<ll> &b){
+    return a[0]>b[0];
+}
 
 class Solution {
 public:
     int m=1e9+7;
     
-    static bool comp(vector<ll> &a,vector<ll> &b){
-        return a[0]>b[0];
-    }
+    
     
     int maxPerformance(int n, vector<int>& speed, vector<int>& efficiency, int k) {
         vector<vector<ll>> arr;

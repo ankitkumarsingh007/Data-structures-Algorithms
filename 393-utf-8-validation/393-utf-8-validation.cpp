@@ -7,12 +7,17 @@ public:
             x=(x&255);
         }
         
+        int mask[5];
+        for(int i=0,j=7;i<5;i++,j--){
+            mask[i]=(1<<j);
+        }
+        
         for(int i=0;i<n;)
         {
             int cnt=0;
             
-            for(int j=7;j>=0;j--){
-                if((arr[i]&(1<<j)) != 0)
+            for(int j=0;j<5;j++){
+                if((arr[i]&mask[j])!=0)
                     cnt++;
                 else
                     break;
@@ -25,7 +30,7 @@ public:
             else{
                 i++;
                 while(cnt>1 && i<n){
-                    if( ((1<<7)&arr[i])!=0 && ((1<<6)&arr[i])==0 )
+                    if( (mask[0]&arr[i])!=0 && (mask[1]&arr[i])==0 )
                         i++,cnt--;
                     else
                         return false;

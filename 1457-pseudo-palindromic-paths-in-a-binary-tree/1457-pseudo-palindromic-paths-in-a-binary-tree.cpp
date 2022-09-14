@@ -20,16 +20,14 @@ public:
         
         cnt[root->val]++;
         if(root->left==NULL && root->right==NULL){
-            int total=0,odd=0;
+            int odd=0;
             
             for(int i=1;i<=9;i++){
-                total+=cnt[i];
-                
                 if(cnt[i]%2==1)
                     odd++;
             }
             
-            if((total%2==0 && odd==0) || (total%2==1 && odd==1))
+            if(odd<=1)
                 res++;
         }
         

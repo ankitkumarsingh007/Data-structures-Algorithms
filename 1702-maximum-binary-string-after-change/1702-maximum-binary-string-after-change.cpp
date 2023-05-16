@@ -10,16 +10,12 @@ public:
                 
                 cnt++;
             }
+            s[i]='1';
         }
         
-        string res="";
-        for(int i=0;i<n;i++){
-            if(i==(start+cnt-1))
-                res+='0';
-            else
-                res+='1';
-        }
+        if(start!=-1)
+        s[start+cnt-1]='0';
         
-        return res;
+        return s;
     }
 };

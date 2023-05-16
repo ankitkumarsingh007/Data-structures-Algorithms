@@ -7,7 +7,7 @@ public:
     
     Bank(vector<long long>& balance) {
         n=balance.size();
-        val=balance;
+        this->val=balance;
     }
     
     bool helper(int a){

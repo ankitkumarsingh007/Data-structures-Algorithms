@@ -2,29 +2,15 @@ class Solution {
 public:
     typedef long long ll;
     long long zeroFilledSubarray(vector<int>& nums) {
-        ll res=0;
+        ll res=0,cnt=0;
         
-        ll start=-1,end,n=nums.size();
-        
-        for(ll i=0;i<n;i++){
-            if(nums[i]==0){
-                if(start==-1)
-                    start=i;
-                end=i;
+        for(int x:nums){
+            if(x==0){
+                cnt++;
+                res+=cnt;
             }
-            else{
-                if(start!=-1){
-                    ll a=end-start+1;
-                    res+=(a*(a+1))/2;
-                }
-                
-                start=-1;
-            }
-        }
-        
-        if(start!=-1){
-            ll a=end-start+1;
-            res+=(a*(a+1))/2;
+            else
+                cnt=0;
         }
         
         return res;

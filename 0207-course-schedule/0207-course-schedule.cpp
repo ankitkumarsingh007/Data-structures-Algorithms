@@ -5,8 +5,8 @@ public:
         vector<int> in(numCourses,0);
         
         for(auto v:prerequisites){
-            adj[v[0]].push_back(v[1]);
-            in[v[1]]++;
+            adj[v[1]].push_back(v[0]);
+            in[v[0]]++;
         }
         
         int cnt=0;

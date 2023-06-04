@@ -1,38 +1,25 @@
 class Solution {
 public:
-    vector<bool> check;
-    vector<vector<int>> graph;
-    
-    void dfs(int i){
+    void dfs(vector<vector<int>>& graph,vector<bool> &check,int i){
         check[i]=false;
         
-        for(int a:graph[i]){
-            if(check[a])
-                dfs(a);
+        int n=graph.size();
+        for(int j=0;j<n;j++){
+            if(check[j] && graph[i][j]==1)
+                dfs(graph,check,j);
         }
         return;
     }
     
-    int findCircleNum(vector<vector<int>>& isConnected) {
-        int n=isConnected.size();
-        graph.resize(n);
-        
-        for(int i=0;i<n;i++){
-            for(int j=0;j<n;j++){
-                if(i!=j && isConnected[i][j]==1){
-                    graph[i].push_back(j);
-                }
-            }
-        }
-        
-        check.clear();
-        check.resize(n,true);
+    int findCircleNum(vector<vector<int>>& graph) {
+        int n=graph.size();
+        vector<bool> check(n,true);
         
         int res=0;
         for(int i=0;i<n;i++){
             if(check[i]){
                 res++;
-                dfs(i);
+                dfs(graph,check,i);
             }
         }
         

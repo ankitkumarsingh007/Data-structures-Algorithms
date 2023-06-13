@@ -2,7 +2,7 @@ class Solution {
 public:
     int equalPairs(vector<vector<int>>& grid) {
         int n=grid.size(),res=0;
-        unordered_map<string,int> mp;
+        map<string,int> mp;
         
         for(auto v:grid){
             string s="";

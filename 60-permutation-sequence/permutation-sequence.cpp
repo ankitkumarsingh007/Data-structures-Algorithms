@@ -1,15 +1,5 @@
 class Solution {
 public:
-    vector<int> deleteElement(vector<int> arr, int ind) {
-        vector<int> temp;
-        for (int i = 0; i < arr.size(); i++) {
-            if (i != ind)
-                temp.push_back(arr[i]);
-        }
-
-        return temp;
-    }
-
     string getPermutation(int n, int k) {
         vector<int> arr;
         vector<int> fact(n + 1, 1);
@@ -29,7 +19,7 @@ public:
             k %= a;
             res += char('0' + arr[num]);
 
-            arr = deleteElement(arr, num);
+            arr.erase(arr.begin()+num);
         }
 
         return res;

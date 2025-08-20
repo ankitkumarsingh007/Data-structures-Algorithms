@@ -6,10 +6,12 @@ public:
         for (int i = maxSize; i >= 1; i--) {
             int smallerThanSize = n;
             for (int j = n - 1; j >= 0; j--) {
-                if(temp[j]>=i){
-                    if((smallerThanSize-(j+i))>=0)
-                    res++;
-                }else{
+                if (temp[j] >= i) {
+                    // Counting if given size square matrix is possible with
+                    // current value as one corner
+                    if ((smallerThanSize - (j + i)) >= 0)
+                        res++;
+                } else {
                     smallerThanSize = j;
                 }
             }

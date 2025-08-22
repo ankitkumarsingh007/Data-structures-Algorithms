@@ -36,7 +36,6 @@ public:
                     j--;
                 }
                 l = (j - i + 1);
-                cout << l << endl;
                 break;
             }
         }
@@ -48,7 +47,6 @@ public:
                     j--;
                 }
                 b = (j - i + 1);
-                cout << b << endl;
                 break;
             }
         }

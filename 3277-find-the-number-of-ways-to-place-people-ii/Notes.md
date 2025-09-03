@@ -1,0 +1,1 @@
+<h2>find-the-number-of-ways-to-place-people-ii Notes</h2><hr>[ Time taken: 46 m 25 s ]

@@ -11,29 +11,30 @@
 class Solution {
 public:
     ListNode* reverseBetween(ListNode* head, int left, int right) {
-        stack<int> st;
-        ListNode* curr = head;
-        int pos = 1;
+        ListNode* dummy = new ListNode();
+        dummy->next = head;
 
-        while (curr) {
-            if (pos >= left && pos <= right) {
-                st.push(curr->val);
-            }
+        ListNode *lprev = dummy, *curr = head;
+        int lCount = left - 1;
+
+        while (lCount--) {
             curr = curr->next;
-            pos++;
+            lprev = lprev->next;
         }
 
-        curr = head;
-        pos = 1;
-        while (curr) {
-            if (pos >= left && pos <= right) {
-                curr->val = st.top();
-                st.pop();
-            }
-            curr = curr->next;
-            pos++;
+        ListNode *prev = NULL, *next;
+        int reverseCount = right - left + 1;
+
+        while (reverseCount--) {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
         }
 
-        return head;
+        lprev->next->next = curr;
+        lprev->next = prev;
+
+        return dummy->next;
     }
 };

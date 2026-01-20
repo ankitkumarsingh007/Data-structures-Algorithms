@@ -11,52 +11,51 @@
 class Solution {
 public:
     ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
-        if (l1 == NULL) {
+        if (!l1)
             return l2;
-        } else if (l2 == NULL) {
-            return l1;
-        }
 
-        int carry = 0, digit;
-        ListNode *root = NULL, *curr = root;
+        if (!l2)
+            return l1;
+
+        ListNode *res = NULL, *head = NULL;
+        int sum = 0, carry = 0;
 
         while (l1 && l2) {
-            digit = (l1->val + l2->val + carry) % 10;
-            carry = (l1->val + l2->val + carry) / 10;
-            l1 = l1->next;
-            l2 = l2->next;
+            int a = l1->val, b = l2->val;
+            l1 = l1->next, l2 = l2->next;
+            sum = (a + b + carry) % 10, carry = (a + b + carry) / 10;
 
-            if (root == NULL) {
-                root = new ListNode(digit);
-                curr = root;
+            if (head == NULL) {
+                res = new ListNode(sum);
+                head = res;
             } else {
-                curr->next = new ListNode(digit);
-                curr = curr->next;
+                head->next = new ListNode(sum);
+                head = head->next;
             }
         }
 
         while (l1) {
-            digit = (l1->val + carry) % 10;
-            carry = (l1->val + carry) / 10;
+            int a = l1->val;
             l1 = l1->next;
+            sum = (a + carry) % 10, carry = (a + carry) / 10;
 
-            curr->next = new ListNode(digit);
-            curr = curr->next;
+            head->next = new ListNode(sum);
+            head = head->next;
         }
 
         while (l2) {
-            digit = (l2->val + carry) % 10;
-            carry = (l2->val + carry) / 10;
+            int a = l2->val;
             l2 = l2->next;
+            sum = (a + carry) % 10, carry = (a + carry) / 10;
 
-            curr->next = new ListNode(digit);
-            curr = curr->next;
+            head->next = new ListNode(sum);
+            head = head->next;
         }
 
-        if (carry != 0) {
-            curr->next = new ListNode(carry);
+        if(carry>0){
+            head->next = new ListNode(carry);
         }
 
-        return root;
+        return res;
     }
 };

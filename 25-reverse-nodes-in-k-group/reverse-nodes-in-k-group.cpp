@@ -10,46 +10,38 @@
  */
 class Solution {
 public:
-    int findSize(ListNode* head) {
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        if (k == 1)
+            return head;
+
         int cnt = 0;
-        while (head != NULL) {
-            head = head->next;
+        ListNode* h1 = head;
+
+        while (h1) {
+            h1 = h1->next;
             cnt++;
         }
 
-        return cnt;
-    }
+        ListNode* dummy = new ListNode();
+        dummy->next = head;
 
-    ListNode* reverseKGroup(ListNode* head, int k) {
-        int n = findSize(head);
-
-        int t = n / k;
-        ListNode *root = NULL, *curr = head, *prev_end = NULL, *first;
+        int t = cnt / k;
+        ListNode *prevTail = dummy, *curr_head = head, *prev = NULL,
+                 *curr = head, *next = NULL;
 
         while (t--) {
-            first = curr;
-            ListNode *prev = NULL, *next;
-
             for (int i = 0; i < k; i++) {
                 next = curr->next;
                 curr->next = prev;
                 prev = curr;
                 curr = next;
             }
-
-            if (prev_end != NULL) {
-                prev_end->next = prev;
-            } else {
-                root = prev;
-            }
-
-            prev_end = first;
+            prevTail->next = prev;
+            prevTail = curr_head;
+            curr_head = curr;
         }
 
-        if (curr != NULL) {
-            prev_end->next = curr;
-        }
-
-        return root;
+        prevTail->next = curr;
+        return dummy->next;
     }
 };

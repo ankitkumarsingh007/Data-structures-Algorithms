@@ -12,10 +12,28 @@
  */
 class Solution {
 public:
-    int countNodes(TreeNode* root) {
-        if (!root)
-            return 0;
+    int height(TreeNode* root) {
+        int height = 0;
+        while (root) {
+            root = root->left;
+            height++;
+        }
+        return height;
+    }
 
-        return 1 + countNodes(root->left) + countNodes(root->right);
+    int countNodes(TreeNode* root) {
+        int size = 0, h = height(root);
+        while (root) {
+            if (height(root->right) == (h - 1)) {
+                size += (1 << (h - 1));
+                root = root->right;
+            } else {
+                size += (1 << (h - 2));
+                root = root->left;
+            }
+            h--;
+        }
+
+        return size;
     }
 };

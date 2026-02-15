@@ -11,6 +11,9 @@ public:
             nums[i] = -nums[i];
         }
 
+        if (res1 <= 0)
+            return res1;
+
         int res2 = nums[0];
         curr_max = nums[0];
         for (int i = 1; i < nums.size(); i++) {
@@ -18,6 +21,6 @@ public:
             res2 = max(res2, curr_max);
         }
 
-        return (totalSum + res2) != 0 ? max(res1, totalSum + res2) : res1;
+        return max(res1, totalSum + res2);
     }
 };

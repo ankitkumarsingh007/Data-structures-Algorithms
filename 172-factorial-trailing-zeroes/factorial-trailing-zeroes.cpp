@@ -2,12 +2,8 @@ class Solution {
 public:
     int trailingZeroes(int n) {
         int res = 0;
-        for (int i = 2; i <= n; i++) {
-            int j = i;
-            while ((j % 5) == 0) {
-                res++;
-                j /= 5;
-            }
+        for (int i = 5; i <= n; i *= 5) {
+            res += (n / i);
         }
 
         return res;

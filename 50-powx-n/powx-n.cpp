@@ -1,17 +1,24 @@
 class Solution {
 public:
     typedef long long ll;
-    double myPow(double x, ll n) {
-        if (n == 0) {
-            return 1.0;
-        }
+    double myPow(double x, int pow) {
+        ll n = pow;
+        if (n == 0 || x==1)
+            return 1;
+
         if (n < 0) {
-            x = 1.0 / x;
-            n = -n;
+            n *= -1;
+            x = 1 / x;
         }
 
-        double val = myPow(x, n / 2);
+        double res = 1, curr = x;
+        while (n) {
+            if (n & 1)
+                res *= x;
+            x *= x;
+            n >>= 1;
+        }
 
-        return n % 2 == 1 ? val * val * x : val * val;
+        return res;
     }
 };

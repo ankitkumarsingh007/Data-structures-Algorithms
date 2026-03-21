@@ -33,7 +33,6 @@ public:
                     l = r + len;
                     r = l;
                 }
-                cout << l << " " << r << " " << s1 << endl;
             }
         }
 

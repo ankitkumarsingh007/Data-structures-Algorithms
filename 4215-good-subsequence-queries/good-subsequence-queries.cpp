@@ -26,6 +26,7 @@ public:
         st[si] = gcd(st[2 * si + 1], st[2 * si + 2]);
     }
     bool canRemove(int si, int l, int r, int ext) {
+        // Remove this exact index, external gcd should be 1
         if (l == r)
             return ext == 1;
 
@@ -38,6 +39,8 @@ public:
         if (left == 1 || right == 1)
             return true;
 
+        // Case1: take full right and see if removing any element from left makes gcd 1
+        // Case2: take full left and see if removing any element from right makes gcd
         return canRemove(2 * si + 1, l, mid, right) ||
                canRemove(2 * si + 2, mid + 1, r, left);
     }

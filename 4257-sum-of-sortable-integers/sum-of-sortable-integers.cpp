@@ -7,6 +7,7 @@ public:
         int mnPos =
             min_element(nums.begin() + l, nums.begin() + r + 1) - nums.begin();
         
+        // this is needed, as array can have repeating values also. So make sure that max & min should be consecutive
         for(int i=l;i<r;i++){
             if(nums[i]==nums[mxPos] && nums[i+1]==nums[mnPos]){
                 mnPos = i+1, mxPos = i;

@@ -1,5 +1,6 @@
 class Solution {
 public:
+    bool solved = false;
     bool isValid(vector<vector<char>>& board, int i, int j, int k) {
         char c = char(k + '0');
         for (int x = 0; x < 9; x++) {
@@ -24,44 +25,27 @@ public:
 
         return true;
     }
-
-    void solve(vector<vector<char>>& board, bool& solutionFound) {
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
-                if (board[i][j] == '.') {
-                    for (int k = 1; k <= 9; k++) {
-                        if (!solutionFound && isValid(board, i, j, k)) {
-                            board[i][j] = char(k + '0');
-                            solve(board, solutionFound);
-                            if (!solutionFound)
-                                board[i][j] = '.';
-                        }
-                    }
-
-                    return;
-                }
-            }
-        }
-        solutionFound = true;
-    }
-
     void solveSudoku(vector<vector<char>>& board) {
-        bool solutionFound = false;
-
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++) {
                 if (board[i][j] == '.') {
                     for (int k = 1; k <= 9; k++) {
                         if (isValid(board, i, j, k)) {
-                            board[i][j] = char(k + '0');
-                            solve(board, solutionFound);
+                            board[i][j] = '0' + k;
+                            solveSudoku(board);
+                            if (solved)
+                                return;
+                            board[i][j] = '.';
                         }
                     }
+                    // Once we found one empty, we put every value there and recurse till we find actual solution
+                    // No need to go through each empty in one go
                     return;
                 }
             }
         }
-
+        // If no empty cells
+        solved = true;
         return;
     }
 };

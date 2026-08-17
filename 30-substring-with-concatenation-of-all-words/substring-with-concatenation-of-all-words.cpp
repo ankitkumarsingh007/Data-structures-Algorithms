@@ -3,36 +3,33 @@ public:
     vector<int> findSubstring(string s, vector<string>& words) {
         vector<int> res;
         int len = words[0].size(), n = s.size();
-        int totalLen = len * words.size();
+        int totalLen = words.size() * len;
 
-        int l = 0, r = 0;
-        unordered_map<string, int> freq;
-        for (string s : words) {
+        unordered_map<string, int> freq, curr;
+
+        for (string s : words)
             freq[s]++;
-        }
 
-        for (int pos = 0; pos < min(len, n - totalLen + 1); pos++) {
-            l = pos, r = pos;
-            unordered_map<string, int> curr;
-            while (r <= (n - len) && l <= (n - totalLen)) {
+        for (int i = 0; i < len; i++) {
+            int l = i, r = i;
+            curr.clear();
+            while (l <= (n - totalLen) && r <= (n - len)) {
                 string s1 = s.substr(r, len);
-                if (freq.count(s1) != 0) {
-                    curr[s1]++;
-                    if (curr[s1] > freq[s1]) {
-                        while (curr[s1] != freq[s1]) {
-                            string remove = s.substr(l, len);
-                            curr[remove]--;
-                            l += len;
-                        }
+                curr[s1]++;
+                if (freq[s1] != 0) {
+                    while (curr[s1] > freq[s1]) {
+                        string s2 = s.substr(l, len);
+                        l += len;
+                        curr[s2]--;
                     }
                     r += len;
-                    if ((r - l) == totalLen)
-                        res.push_back(l);
                 } else {
-                    curr.clear();
                     l = r + len;
                     r = l;
+                    curr.clear();
                 }
+                if ((r - l) == totalLen)
+                    res.push_back(l);
             }
         }
 

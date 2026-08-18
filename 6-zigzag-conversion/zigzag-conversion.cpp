@@ -1,27 +1,34 @@
 class Solution {
 public:
     string convert(string s, int numRows) {
-        if (numRows == 1) {
-            return s;
-        }
-
-        vector<vector<char>> arr(numRows);
-        int ind = 0;
-        bool straight = true;
-        for (char c : s) {
-            if (ind == 0) {
-                straight = true;
-            } else if (ind == (numRows - 1)) {
-                straight = false;
-            }
-            arr[ind].push_back(c);
-            ind = straight ? ind + 1 : ind - 1;
-        }
-
         string res = "";
-        for (auto v : arr) {
-            for (char c : v) {
-                res += c;
+        int n = s.size();
+
+        if (n <= numRows || numRows==1)
+            return s;
+
+        int delta = 2 * (numRows - 1);
+        int currDelta = delta;
+
+        for (int row = 0; row < numRows; row++) {
+            if (row == 0 || row == (numRows - 1)) {
+                int i = row;
+                while (i < n) {
+                    res += s[i];
+                    i += delta;
+                }
+            } else {
+                int i = row;
+                currDelta -= 2;
+                while (i < n) {
+                    res += s[i];
+                    i += currDelta;
+
+                    if (i < n) {
+                        res += s[i];
+                        i += (delta - currDelta);
+                    }
+                }
             }
         }
 

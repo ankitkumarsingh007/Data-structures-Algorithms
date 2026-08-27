@@ -1,22 +1,26 @@
 class Solution {
 public:
     typedef long long ll;
-    double myPow(double x, int pow) {
-        ll n = pow;
-        if (n == 0 || x==1)
+    double myPow(double x, int n) {
+        if (n == 0)
             return 1;
+        if (x == 0)
+            return x;
+
+        double res = 1;
+        // Saving from corner case when n==INT_MIN 
+        ll power = abs(ll(n));
 
         if (n < 0) {
-            n *= -1;
             x = 1 / x;
         }
 
-        double res = 1, curr = x;
-        while (n) {
-            if (n & 1)
+        while (power != 0) {
+            if (power & 1)
                 res *= x;
+
             x *= x;
-            n >>= 1;
+            power>>=1;
         }
 
         return res;

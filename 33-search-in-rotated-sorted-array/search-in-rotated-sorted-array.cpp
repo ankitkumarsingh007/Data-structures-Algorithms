@@ -4,20 +4,27 @@ public:
         int l = 0, r = nums.size() - 1;
 
         while (l <= r) {
-            int mid = (l + r) / 2;
-            if (target == nums[mid])
-                return mid;
+            int m = l + (r - l) / 2;
 
-            if (nums[mid] <= nums[r]) {
-                if (target > nums[mid] && target <= nums[r])
-                    l = mid + 1;
+            if (nums[m] == target)
+                return m;
+            // we need to take care of case when l==m, then if target has not
+            // matched we want to do l=m+1 in any case and this case will help
+            // in that, else it would have went to r=m-1 in next loop
+            else if (nums[l] <= nums[m]) {
+                // Make sure we are scoping down in confirm manner that result
+                // will be in this part
+                if (target < nums[m] && target >= nums[l])
+                    r = m - 1;
                 else
-                    r = mid - 1;
+                    l = m + 1;
             } else {
-                if (target >= nums[l] && target < nums[mid])
-                    r = mid - 1;
+                // Make sure we are scoping down in confirm manner that result
+                // will be in this part
+                if (target > nums[m] && target <= nums[r])
+                    l = m + 1;
                 else
-                    l = mid + 1;
+                    r = m - 1;
             }
         }
 

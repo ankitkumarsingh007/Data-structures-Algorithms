@@ -1,39 +1,60 @@
 class Solution {
 public:
-    int getVal(vector<int>& nums, int i) {
+    // Remove nums[skip] and count the positions where:
+    // GCD(prefix) == GCD(suffix)
+    //
+    // Key observation:
+    // Adding more elements to a set can never increase its GCD.
+    // Therefore, while scanning possible split points, we only need to
+    // consider positions where the prefix GCD actually changes.
+    int getVal(vector<int>& nums, int skip) {
         int n = nums.size();
+
+        // Build the array after removing nums[skip].
         vector<int> arr;
-        for (int j = 0; j < n; j++) {
-            if (j != i)
-                arr.push_back(nums[j]);
+        for (int i = 0; i < n; i++) {
+            if (i != skip) {
+                arr.push_back(nums[i]);
+            }
         }
 
-        n = arr.size();
+        int m = arr.size();
 
-        vector<int> pre(n, 0), suf(n);
+        // pre[i] = GCD of arr[0 ... i-1]
+        // suf[i] = GCD of arr[i ... m-1]
+        vector<int> pre(m, 0);
+        vector<int> suf(m, 0);
 
-        for (int i = 1; i < n; i++) {
+        // Build prefix GCD.
+        for (int i = 1; i < m; i++) {
             pre[i] = gcd(pre[i - 1], arr[i - 1]);
         }
-        for (int i = n - 1; i >= 0; i--) {
-            if (i == (n - 1))
+
+        // Build suffix GCD.
+        for (int i = m - 1; i >= 0; i--) {
+            if (i == m - 1) {
                 suf[i] = arr[i];
-            else
+            } else {
                 suf[i] = gcd(suf[i + 1], arr[i]);
+            }
         }
 
-        int res = 0;
+        int count = 0;
 
-        for (int i = 0; i < n; i++) {
-            if (pre[i] == suf[i])
-                res++;
+        // Check every possible split.
+        for (int i = 0; i < m; i++) {
+            if (pre[i] == suf[i]) {
+                count++;
+            }
         }
 
-        return res;
+        return count;
     }
 
     int maxValidSplits(vector<int>& nums) {
         int n = nums.size();
+
+        // pre[i] = GCD of nums[0 ... i-1]
         vector<int> pre(n + 1, 0);
 
         for (int i = 1; i < n; i++) {
@@ -42,13 +63,30 @@ public:
 
         int res = 0;
 
+        // Try removing one element before checking the splits.
+        //
+        // Since GCD can only stay the same or decrease as we add elements,
+        // removing an element is useful only when it can actually change
+        // the prefix GCD.
+        //
+        // Therefore, we skip positions where:
+        //     pre[i] == pre[i - 1]
+        //
+        // There can be only a small number of distinct decreasing GCD
+        // values (roughly O(log(max(nums)))), so getVal() is called only
+        // a limited number of times.
         for (int i = 0; i <= n; i++) {
-            // This value is not changing gcd so explicit care not needed, Also
-            // wanted to take 0 by default
-            if (i > 0 && pre[i] == pre[i - 1])
-                continue;
 
-            // for 0, skip val will -1, So no one skipped
+            // If adding nums[i - 1] did not change the prefix GCD,
+            // removing it cannot improve the prefix GCD.
+            if (i > 0 && pre[i] == pre[i - 1]) {
+                continue;
+            }
+
+            // For i = 0, there is no element before the split,
+            // so use -1 to indicate that no element is removed.
+            //
+            // For i > 0, remove nums[i - 1].
             res = max(res, getVal(nums, i - 1));
         }
 

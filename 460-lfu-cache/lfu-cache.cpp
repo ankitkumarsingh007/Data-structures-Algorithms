@@ -1,148 +1,145 @@
 class LFUCache {
     struct Node {
-        int key, val, freq;
-        Node* prev;
-        Node* next;
+        int val, key, freq;
+        Node *prev, *next;
 
-        Node(int k, int v) {
-            key = k;
-            val = v;
-            freq = 1; // Every new key starts with frequency 1
-            prev = next = nullptr;
+        Node(int a, int b) {
+            val = a, key = b;
+            freq = 1;
+            prev = NULL;
+            next = NULL;
         }
     };
 
     struct DLL {
-        Node* left;
-        Node* right;
+        Node *left, *right;
         int size;
 
         DLL() {
-            left = new Node(0, 0);  // Dummy left node
-            right = new Node(0, 0); // Dummy right node
+            left = new Node(0, 0);
+            right = new Node(0, 0);
 
             left->next = right;
             right->prev = left;
             size = 0;
         }
 
-        // Insert node at the right (most recently used)
-        void pushRight(Node* node) {
-            Node* last = right->prev;
+        // Detach node from the list, but don't delete it
+        void pop(Node* curr) {
+            curr->prev->next = curr->next;
+            curr->next->prev = curr->prev;
 
-            last->next = node;
-            node->prev = last;
+            curr->prev = curr->next = NULL;
+            size--;
+        }
 
-            node->next = right;
-            right->prev = node;
+        // Insert at right (most recently used)
+        void pushRight(Node* curr) {
+            curr->prev = right->prev;
+            curr->next = right;
+
+            right->prev->next = curr;
+            right->prev = curr;
 
             size++;
         }
 
-        // Remove a node from the list
-        void remove(Node* node) {
-            node->prev->next = node->next;
-            node->next->prev = node->prev;
+        // Permanently remove the LRU node
+        void popLeft() {
+            Node* deleteNode = left->next;
 
-            node->prev = node->next = nullptr;
+            left->next = deleteNode->next;
+            deleteNode->next->prev = left;
+
             size--;
+            delete deleteNode;
         }
 
-        // Remove and return the leftmost (LRU) node
-        Node* popLeft() {
-            Node* node = left->next;
-            remove(node);
-            return node;
+        bool isempty() {
+            return size == 0;
         }
-
-        bool empty() { return size == 0; }
     };
 
-    int capacity;
-    int minFreq;
+    unordered_map<int, DLL*> freqList; // frequency -> DLL
+    unordered_map<int, Node*> nodeList; // key -> node
 
-    unordered_map<int, Node*> nodeMap; // key -> node
-    unordered_map<int, DLL*> listMap;  // frequency -> DLL
+    int minFreq, capacity;
 
-    // Increase frequency of a node after get() or updating an existing key
-    void increaseFreq(Node* node) {
-        int oldFreq = node->freq;
+    // Increase frequency of an existing node
+    void increaseFreq(Node* curr) {
+        int oldFreq = curr->freq;
 
-        // Remove node from its current frequency list
-        listMap[oldFreq]->remove(node);
+        // Remove from old frequency list
+        freqList[oldFreq]->pop(curr);
 
-        // If this was the last node at minimum frequency,
-        // the minimum frequency will increase by 1
-        if (oldFreq == minFreq && listMap[oldFreq]->empty()) {
+        // Update minFreq only if the old minimum list becomes empty
+        if (oldFreq == minFreq && freqList[oldFreq]->isempty()) {
             minFreq++;
         }
 
         // Increase frequency
-        node->freq++;
+        curr->freq++;
 
-        // Create the new frequency list if it doesn't exist
-        if (!listMap.count(node->freq)) {
-            listMap[node->freq] = new DLL();
+        // Create new frequency list if needed
+        if (!freqList.count(curr->freq)) {
+            freqList[curr->freq] = new DLL();
         }
 
-        // Add node as most recently used at its new frequency
-        listMap[node->freq]->pushRight(node);
+        // Insert as most recently used in new frequency
+        freqList[curr->freq]->pushRight(curr);
     }
 
 public:
-    LFUCache(int capacity) {
-        this->capacity = capacity;
+    LFUCache(int cap) {
         minFreq = 0;
+        capacity = cap;
     }
 
     int get(int key) {
-        // Key does not exist
-        if (!nodeMap.count(key)) {
+        if (!nodeList.count(key)) {
             return -1;
         }
 
-        Node* node = nodeMap[key];
+        Node* curr = nodeList[key];
 
-        // Accessing a key increases its frequency
-        increaseFreq(node);
+        // Access increases frequency
+        increaseFreq(curr);
 
-        return node->val;
+        return curr->val;
     }
 
     void put(int key, int value) {
-        if (capacity == 0)
+        if (capacity == 0) return;
+
+        // Key already exists: update and increase frequency
+        if (nodeList.count(key)) {
+            Node* curr = nodeList[key];
+
+            curr->val = value;
+            increaseFreq(curr);
+
             return;
-
-        // Key already exists: update value and increase frequency
-        if (nodeMap.count(key)) {
-            Node* node = nodeMap[key];
-            node->val = value;
-            increaseFreq(node);
-            return;
         }
 
-        // Cache is full: evict LFU, and LRU among LFU keys
-        if (nodeMap.size() == capacity) {
-            DLL* list = listMap[minFreq];
+        // Cache full: evict LFU, and LRU among LFU
+        if (nodeList.size() == capacity) {
+            Node* victim = freqList[minFreq]->left->next;
 
-            Node* victim = list->popLeft();
-
-            nodeMap.erase(victim->key);
-            delete victim;
+            nodeList.erase(victim->key);
+            freqList[minFreq]->popLeft();
         }
 
-        // Insert new node (frequency starts at 1)
-        Node* node = new Node(key, value);
-        nodeMap[key] = node;
+        // Insert new node (frequency = 1)
+        Node* curr = new Node(value, key);
 
-        // All new nodes enter frequency 1
-        if (!listMap.count(1)) {
-            listMap[1] = new DLL();
+        nodeList[key] = curr; // Important: insert into hashmap
+
+        if (!freqList.count(1)) {
+            freqList[1] = new DLL();
         }
 
-        listMap[1]->pushRight(node);
+        freqList[1]->pushRight(curr);
 
-        // Newly inserted node has the lowest frequency
-        minFreq = 1;
+        minFreq = 1; // Every new node starts at frequency 1
     }
 };

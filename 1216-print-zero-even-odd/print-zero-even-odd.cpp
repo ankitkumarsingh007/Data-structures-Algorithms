@@ -1,8 +1,7 @@
 class ZeroEvenOdd {
 private:
     int n;
-    bool zeroFlag = true;
-    bool oddFlag = true;
+    int turn = 0;
     condition_variable cv;
     mutex mtx;
 
@@ -11,12 +10,12 @@ public:
 
     // printNumber(x) outputs "x", where x is an integer.
     void zero(function<void(int)> printNumber) {
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i <= n; i++) {
             unique_lock<mutex> lck(mtx);
-            cv.wait(lck, [this] { return zeroFlag; });
+            cv.wait(lck, [this] { return turn == 0; });
 
             printNumber(0);
-            zeroFlag = false;
+            turn  = (i%2 == 0 ? 2 : 1);
             cv.notify_all();
         }
     }
@@ -24,10 +23,9 @@ public:
     void even(function<void(int)> printNumber) {
         for (int i = 2; i <= n; i += 2) {
             unique_lock<mutex> lck(mtx);
-            cv.wait(lck, [this] { return !zeroFlag && !oddFlag; });
+            cv.wait(lck, [this] { return turn == 2; });
             printNumber(i);
-            zeroFlag = true;
-            oddFlag = true;
+            turn = 0;
             cv.notify_all();
         }
     }
@@ -35,10 +33,9 @@ public:
     void odd(function<void(int)> printNumber) {
         for (int i = 1; i <= n; i += 2) {
             unique_lock<mutex> lck(mtx);
-            cv.wait(lck, [this] { return !zeroFlag && oddFlag; });
+            cv.wait(lck, [this] { return turn == 1; });
             printNumber(i);
-            zeroFlag = true;
-            oddFlag = false;
+            turn =0;
             cv.notify_all();
         }
     }

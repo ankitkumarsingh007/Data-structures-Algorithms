@@ -9,15 +9,12 @@ public:
             return dp[n1][n2];
 
         if (n1 != 0 && n2 != 0) {
-            if (s1[n1 - 1] == s2[n2 - 1])
-                dp[n1][n2] = fun(s1, s2, n1 - 1, n2 - 1);
-            else
-                dp[n1][n2] = min(dp[n1][n2], 1 + fun(s1, s2, n1 - 1, n2 - 1));
+                dp[n1][n2] = s1[n1-1]==s2[n2-1] ? fun(s1,s2,n1-1,n2-1) : min(fun(s1,s2,n1,n2-1),min(fun(s1,s2,n1-1,n2),fun(s1,s2,n1-1,n2-1))) + 1;
+        }else if(n1==0){
+            dp[n1][n2] = n2;
+        }else{
+            dp[n1][n2] = n1;
         }
-        if (n1 != 0)
-            dp[n1][n2] = min(dp[n1][n2], 1 + fun(s1, s2, n1 - 1, n2));
-        if (n2 != 0)
-            dp[n1][n2] = min(dp[n1][n2], 1 + fun(s1, s2, n1, n2 - 1));
 
         return dp[n1][n2];
     }
